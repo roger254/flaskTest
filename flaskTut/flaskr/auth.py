@@ -75,9 +75,9 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute('SELECT * FROM user WHERE id = ?', (user_id),).fetchone()
+        g.user = get_db().execute('SELECT * FROM user WHERE id = ?', (user_id,)).fetchone()
 
-
+@bp.route('/logout')
 def logout():  # handle log-out
     session.clear()
     return redirect(url_for('index'))
@@ -89,6 +89,6 @@ def login_required(view):  # decorator to check if user is logged in
         if g.user is None:  # if no user redirect to login
             return redirect(url_for('auth.login'))
 
-        return view(**args)
+        return view(**kwargs)
 
     return wrapped_view
